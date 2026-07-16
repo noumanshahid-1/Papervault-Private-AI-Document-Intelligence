@@ -12,8 +12,13 @@ def test_ocr_evaluation_dataset_is_complete_and_valid() -> None:
 
     assert version == 1
     assert {case.document_path.suffix for case in cases} == {".png", ".pdf"}
+    assert {
+        "rotated_image",
+        "low_contrast_image",
+        "multi_page_scanned_pdf",
+    }.issubset({case.profile for case in cases})
     assert all(case.document_path.is_file() for case in cases)
-    assert sum(len(case.questions) for case in cases) >= 4
+    assert sum(len(case.questions) for case in cases) >= 14
 
 
 def test_ocr_evaluation_meets_baseline() -> None:

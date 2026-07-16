@@ -4,6 +4,7 @@
   "cases": [
     {
       "id": "appointment-image-ocr",
+      "profile": "baseline_image",
       "document": "ocr_documents/appointment-notice.png",
       "content_type": "image/png",
       "expected_text_contains": [
@@ -31,6 +32,7 @@
     },
     {
       "id": "payment-scanned-pdf-ocr",
+      "profile": "baseline_scanned_pdf",
       "document": "ocr_documents/payment-notice-scan.pdf",
       "content_type": "application/pdf",
       "expected_page_count": 1,
@@ -51,6 +53,105 @@
         {
           "question": "When is the payment deadline?",
           "expected_answer_contains": ["31 March 2026"]
+        }
+      ]
+    },
+    {
+      "id": "rotated-scholarship-image-ocr",
+      "profile": "rotated_image",
+      "document": "ocr_documents/rotated-scholarship-notice.png",
+      "content_type": "image/png",
+      "expected_text_contains": [
+        "SCHOLARSHIP AWARD NOTICE",
+        "12 November 2026",
+        "USD 350",
+        "Signed acceptance form",
+        "18 January 2027",
+        "awards@northbridge.example"
+      ],
+      "minimum_confidence_score": 0.8,
+      "questions": [
+        {
+          "question": "When is the acceptance deadline?",
+          "expected_answer_contains": ["12 November 2026"]
+        },
+        {
+          "question": "What security deposit is required?",
+          "expected_answer_contains": ["USD 350"]
+        },
+        {
+          "question": "When does the programme start?",
+          "expected_answer_contains": ["18 January 2027"]
+        }
+      ]
+    },
+    {
+      "id": "low-contrast-renewal-image-ocr",
+      "profile": "low_contrast_image",
+      "document": "ocr_documents/low-contrast-renewal.png",
+      "content_type": "image/png",
+      "expected_text_contains": [
+        "PROFESSIONAL LICENSE RENEWAL",
+        "5 December 2026",
+        "GBP 240",
+        "Identity copy and training certificate",
+        "licensing portal",
+        "renewals@licensing.example"
+      ],
+      "minimum_confidence_score": 0.75,
+      "questions": [
+        {
+          "question": "When is the renewal deadline?",
+          "expected_answer_contains": ["5 December 2026"]
+        },
+        {
+          "question": "What is the renewal fee?",
+          "expected_answer_contains": ["GBP 240"]
+        },
+        {
+          "question": "Which documents are required?",
+          "expected_answer_contains": [
+            "Identity copy",
+            "training certificate"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "multi-page-residence-pdf-ocr",
+      "profile": "multi_page_scanned_pdf",
+      "document": "ocr_documents/multi-page-residence-scan.pdf",
+      "content_type": "application/pdf",
+      "expected_page_count": 2,
+      "expected_text_contains": [
+        "RESIDENCE APPLICATION",
+        "14 January 2027",
+        "20 December 2026",
+        "Passport copy and recent bank statement",
+        "EUR 120",
+        "residence@services.example",
+        "RA-2026-118"
+      ],
+      "minimum_confidence_score": 0.8,
+      "questions": [
+        {
+          "question": "When is the interview date?",
+          "expected_answer_contains": ["14 January 2027"]
+        },
+        {
+          "question": "What is the submission deadline?",
+          "expected_answer_contains": ["20 December 2026"]
+        },
+        {
+          "question": "Which documents are required?",
+          "expected_answer_contains": [
+            "Passport copy",
+            "recent bank statement"
+          ]
+        },
+        {
+          "question": "How can I contact the residence office?",
+          "expected_answer_contains": ["residence@services.example"]
         }
       ]
     }

@@ -19,6 +19,9 @@
 - Added automatic local OCR fallback for PDF pages that contain little or no
   embedded text.
 - Improved normalization for OCR-fused dates, years, and currency codes.
+- Added rotated-image, low-contrast, and two-page scanned-PDF stress profiles.
+- Split common fused uppercase OCR labels so date and field questions select
+  the correct page and evidence.
 - Added local answer-mode and Ollama model selection with explicit fallback
   diagnostics.
 - Added `/intelligence/runtime` for bounded Ollama model discovery and local

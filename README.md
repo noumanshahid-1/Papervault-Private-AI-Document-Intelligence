@@ -11,14 +11,14 @@
   </p>
 
   <p>
-    <a href="https://github.com/noumanshahid-1/-Papervault-Private-AI-Document-Intelligence/actions/workflows/backend.yml">
-      <img src="https://github.com/noumanshahid-1/-Papervault-Private-AI-Document-Intelligence/actions/workflows/backend.yml/badge.svg" alt="Backend checks" />
+    <a href="https://github.com/noumanshahid-1/Papervault-Private-AI-Document-Intelligence/actions/workflows/backend.yml">
+      <img src="https://github.com/noumanshahid-1/Papervault-Private-AI-Document-Intelligence/actions/workflows/backend.yml/badge.svg" alt="Backend checks" />
     </a>
-    <a href="https://github.com/noumanshahid-1/-Papervault-Private-AI-Document-Intelligence/actions/workflows/frontend.yml">
-      <img src="https://github.com/noumanshahid-1/-Papervault-Private-AI-Document-Intelligence/actions/workflows/frontend.yml/badge.svg" alt="Frontend checks" />
+    <a href="https://github.com/noumanshahid-1/Papervault-Private-AI-Document-Intelligence/actions/workflows/frontend.yml">
+      <img src="https://github.com/noumanshahid-1/Papervault-Private-AI-Document-Intelligence/actions/workflows/frontend.yml/badge.svg" alt="Frontend checks" />
     </a>
-    <a href="https://github.com/noumanshahid-1/-Papervault-Private-AI-Document-Intelligence/actions/workflows/server.yml">
-      <img src="https://github.com/noumanshahid-1/-Papervault-Private-AI-Document-Intelligence/actions/workflows/server.yml/badge.svg" alt="BFF checks" />
+    <a href="https://github.com/noumanshahid-1/Papervault-Private-AI-Document-Intelligence/actions/workflows/server.yml">
+      <img src="https://github.com/noumanshahid-1/Papervault-Private-AI-Document-Intelligence/actions/workflows/server.yml/badge.svg" alt="BFF checks" />
     </a>
   </p>
 
@@ -33,7 +33,19 @@
 
 ---
 
+## Product preview
+
+### Private document intake
+
+![Papervault private document intake in dark mode](docs/screenshots/papervault-intake-dark.png)
+
+### Structured review workspace
+
 ![Papervault document review workspace](docs/screenshots/papervault-workspace.png)
+
+### Explainable document Q&A
+
+![Papervault grounded document Q&A with retrieval diagnostics](docs/screenshots/papervault-explainable-qa-dark.png)
 
 ## Overview
 
@@ -147,7 +159,7 @@ proxying while all document-processing logic remains in the Python backend.
 ### Install
 
 ```bash
-git clone https://github.com/noumanshahid-1/-Papervault-Private-AI-Document-Intelligence.git papervault
+git clone https://github.com/noumanshahid-1/Papervault-Private-AI-Document-Intelligence.git papervault
 cd papervault
 
 npm install
@@ -221,7 +233,7 @@ npm run check
 
 This checkpoint validates:
 
-- 84 backend tests
+- 85 backend tests
 - 8 frontend tests
 - OpenAPI contract freshness
 - Raw TypeScript contract freshness
@@ -271,9 +283,10 @@ Current deterministic baseline:
 | Grounded source rate | 100% |
 | Negative-case accuracy | 100% |
 
-The OCR extension adds a high-contrast PNG and a raster-only PDF with no
-embedded text. It verifies local OCR detection, extraction quality, recovered
-dates and amounts, and four downstream grounded questions.
+The OCR extension includes five files across baseline image, baseline
+raster-only PDF, rotated image, low-contrast image, and two-page scanned PDF
+profiles. It verifies local OCR detection, extraction quality, page aggregation,
+recovered dates and amounts, and fourteen downstream grounded questions.
 
 | OCR metric | Result |
 |---|---:|
@@ -346,7 +359,7 @@ papervault/
 - Docker and Compose development environment
 - One-click development container
 - Multi-document collections and cross-document retrieval
-- Add rotated, low-contrast, and multi-page OCR stress cases
+- Add noisy camera captures and mixed embedded-text/scanned PDF cases
 
 ## License
 
