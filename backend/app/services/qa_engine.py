@@ -25,6 +25,18 @@ from app.utils.text_cleaning import normalize_ocr_artifacts, normalize_extracted
 
 
 NOT_FOUND_MESSAGE = "Not found in the document."
+_GENERIC_CONTEXT_TERMS = {
+    "agreement",
+    "application",
+    "appointment",
+    "document",
+    "invoice",
+    "letter",
+    "notice",
+    "offer",
+    "programme",
+    "program",
+}
 _DATE_PATTERN = re.compile(
     r"\b(?:January|February|March|April|May|June|July|August|September|October|"
     r"November|December|Jan|Feb|Mar|Apr|Jun|Jul|Aug|Sep|Sept|Oct|Nov|Dec)\.?\s+"
@@ -181,13 +193,17 @@ def answer_question(
 def _best_grounded_sentence(
     question: str, retrieved: list[RetrievalResult]
 ) -> str | None:
-    if not text_terms(question):
+    question_terms = text_terms(question)
+    if not question_terms:
         return None
 
     best_sentence: str | None = None
     best_score = 0.0
     for result in retrieved:
         for sentence in _sentences(result.chunk.text):
+            original_matches = question_terms.intersection(text_terms(sentence))
+            if not original_matches.difference(_GENERIC_CONTEXT_TERMS):
+                continue
             if not matched_query_terms(question, sentence):
                 continue
             score = sentence_relevance(question, sentence, result.score)
@@ -201,7 +217,26 @@ def _best_grounded_sentence(
 def _direct_grounded_answer(question: str, text: str) -> str | None:
     lowered = question.lower()
     sentences = _sentences(text)
-    if any(term in lowered for term in ("deadline", "deadlines", "date", "dates", "due", "when")):
+    amount_question = any(
+        term in lowered
+        for term in (
+            "amount",
+            "balance",
+            "cost",
+            "fee",
+            "fees",
+            "how much",
+            "payment",
+            "rate",
+            "tax",
+            "total",
+        )
+    )
+    explicit_date_question = any(
+        term in lowered
+        for term in ("deadline", "deadlines", "date", "dates", "when")
+    )
+    if explicit_date_question or ("due" in lowered and not amount_question):
         dated_sentence = _first_sentence_with_date(sentences, question)
         if dated_sentence:
             return dated_sentence
@@ -222,8 +257,24 @@ def _direct_grounded_answer(question: str, text: str) -> str | None:
         if requirement_sentence:
             return requirement_sentence
 
+    if any(
+        term in lowered
+        for term in (
+            "obligation",
+            "obligations",
+            "required",
+            "must",
+            "shall",
+            "liable",
+            "responsible person",
+        )
+    ):
+        obligations = _summarized_obligations(sentences)
+        if obligations:
+            return "The document appears to mention these obligations: " + "; ".join(obligations)
+
     if any(term in lowered for term in ("payment", "payments", "rate", "rates", "fee", "amount", "tax")):
-        amount_sentence = _first_sentence_with_amount(sentences)
+        amount_sentence = _first_sentence_with_amount(sentences, question)
         if amount_sentence is None:
             amount_sentence = _first_sentence_matching(
             sentences,
@@ -234,11 +285,6 @@ def _direct_grounded_answer(question: str, text: str) -> str | None:
             if amount:
                 return f"The document appears to mention {amount}."
             return amount_sentence
-
-    if any(term in lowered for term in ("obligation", "obligations", "required", "must", "shall", "liable")):
-        obligations = _summarized_obligations(sentences)
-        if obligations:
-            return "The document appears to mention these obligations: " + "; ".join(obligations)
 
     if any(
         term in lowered
@@ -266,11 +312,17 @@ def _first_sentence_matching(sentences: list[str], markers: tuple[str, ...]) -> 
     return None
 
 
-def _first_sentence_with_amount(sentences: list[str]) -> str | None:
-    for sentence in sentences:
-        if _first_amount(sentence):
-            return sentence
-    return None
+def _first_sentence_with_amount(
+    sentences: list[str],
+    question: str,
+) -> str | None:
+    candidates = [sentence for sentence in sentences if _first_amount(sentence)]
+    if not candidates:
+        return None
+    return max(
+        candidates,
+        key=lambda sentence: sentence_relevance(question, sentence, 0.0),
+    )
 
 
 def _first_sentence_with_date(sentences: list[str], question: str) -> str | None:

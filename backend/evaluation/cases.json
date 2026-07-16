@@ -1,0 +1,139 @@
+{
+  "version": 1,
+  "description": "Privacy-safe representative cases for local retrieval and extractive Q&A.",
+  "cases": [
+    {
+      "id": "admission-start-date",
+      "category": "date_disambiguation",
+      "document": "documents/university_offer.txt",
+      "question": "When does the MSc Data Science programme begin?",
+      "expected_answer_contains": ["15 September 2026"],
+      "expected_evidence_contains": ["programme begins on 15 September 2026"]
+    },
+    {
+      "id": "admission-response-deadline",
+      "category": "deadline",
+      "document": "documents/university_offer.txt",
+      "question": "When do I need to respond to the offer?",
+      "expected_answer_contains": ["15 July 2026"],
+      "expected_evidence_contains": ["no later than 15 July 2026"]
+    },
+    {
+      "id": "admission-required-documents",
+      "category": "required_documents",
+      "document": "documents/university_offer.txt",
+      "question": "What paperwork should I prepare?",
+      "expected_answer_contains": ["valid passport copy", "official academic transcript"],
+      "expected_evidence_contains": ["Required documents include a valid passport copy"]
+    },
+    {
+      "id": "admission-contact",
+      "category": "contact",
+      "document": "documents/university_offer.txt",
+      "question": "How can I contact admissions?",
+      "expected_answer_contains": ["admissions@example.edu"],
+      "expected_evidence_contains": ["Contact admissions@example.edu"]
+    },
+    {
+      "id": "admission-missing-housing-address",
+      "category": "negative",
+      "document": "documents/university_offer.txt",
+      "question": "What is the campus housing address?",
+      "expect_not_found": true
+    },
+    {
+      "id": "notice-fixed-rate",
+      "category": "amount",
+      "document": "documents/revenue_notice.txt",
+      "question": "What fixed tax rate is mentioned?",
+      "expected_answer_contains": ["Rs. 3,000/- per goods declaration"],
+      "expected_evidence_contains": ["Rs. 3.000/- per goods declaration"]
+    },
+    {
+      "id": "notice-payment-obligation",
+      "category": "obligation",
+      "document": "documents/revenue_notice.txt",
+      "question": "What payment obligation must the responsible person follow?",
+      "expected_answer_contains": ["collection and payment of sales tax"],
+      "expected_evidence_contains": ["timely collection and payment of sales tax"]
+    },
+    {
+      "id": "notice-record-retention",
+      "category": "obligation",
+      "document": "documents/revenue_notice.txt",
+      "question": "How long must supporting records be maintained?",
+      "expected_answer_contains": ["five years"],
+      "expected_evidence_contains": ["maintained for five years"]
+    },
+    {
+      "id": "notice-missing-refund-process",
+      "category": "negative",
+      "document": "documents/revenue_notice.txt",
+      "question": "What is the refund application procedure?",
+      "expect_not_found": true
+    },
+    {
+      "id": "contract-monthly-fee",
+      "category": "amount",
+      "document": "documents/service_agreement.txt",
+      "question": "What is the monthly service fee?",
+      "expected_answer_contains": ["USD 1,200"],
+      "expected_evidence_contains": ["monthly service fee is USD 1,200"]
+    },
+    {
+      "id": "contract-termination-notice",
+      "category": "obligation",
+      "document": "documents/service_agreement.txt",
+      "question": "How much notice is needed to terminate the agreement?",
+      "expected_answer_contains": ["30 days", "written notice"],
+      "expected_evidence_contains": ["30 days' written notice"]
+    },
+    {
+      "id": "contract-governing-law",
+      "category": "fact",
+      "document": "documents/service_agreement.txt",
+      "question": "Which law governs the agreement?",
+      "expected_answer_contains": ["Province of Ontario"],
+      "expected_evidence_contains": ["governed by the laws of the Province of Ontario"]
+    },
+    {
+      "id": "invoice-total-due",
+      "category": "amount_disambiguation",
+      "document": "documents/invoice.txt",
+      "question": "What is the total amount due?",
+      "expected_answer_contains": ["USD 2,700"],
+      "expected_evidence_contains": ["total amount due is USD 2,700"]
+    },
+    {
+      "id": "invoice-due-date",
+      "category": "deadline",
+      "document": "documents/invoice.txt",
+      "question": "When is payment due?",
+      "expected_answer_contains": ["31 March 2026"],
+      "expected_evidence_contains": ["Payment is due by 31 March 2026"]
+    },
+    {
+      "id": "appointment-date",
+      "category": "date_disambiguation",
+      "document": "documents/visa_appointment.txt",
+      "question": "When is the document review appointment?",
+      "expected_answer_contains": ["22 October 2026"],
+      "expected_evidence_contains": ["appointment is scheduled for 22 October 2026"]
+    },
+    {
+      "id": "appointment-required-documents",
+      "category": "required_documents",
+      "document": "documents/visa_appointment.txt",
+      "question": "Which documents should I bring?",
+      "expected_answer_contains": ["current passport", "two recent photographs"],
+      "expected_evidence_contains": ["Bring your current passport"]
+    },
+    {
+      "id": "appointment-missing-parking",
+      "category": "negative",
+      "document": "documents/visa_appointment.txt",
+      "question": "Where should I park for the appointment?",
+      "expect_not_found": true
+    }
+  ]
+}

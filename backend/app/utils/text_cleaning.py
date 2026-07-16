@@ -57,6 +57,10 @@ def normalize_ocr_artifacts(text: str) -> str:
         "November|December|Jan|Feb|Mar|Apr|Jun|Jul|Aug|Sep|Sept|Oct|Nov|Dec"
     )
     normalized = re.sub(rf"(?i)(\d{{1,2}})(?:st|nd|rd|th|t)(?=({month_names}))", r"\1 ", normalized)
+    normalized = re.sub(rf"(?i)(\d{{1,2}})(?=({month_names}))", r"\1 ", normalized)
+    normalized = re.sub(rf"(?i)({month_names})(?=\d{{4}})", r"\1 ", normalized)
+    normalized = re.sub(r"(?<=\d{4})(?=[A-Za-z])", " ", normalized)
+    normalized = re.sub(r"\b(USD|EUR|GBP|PKR)(?=\d)", r"\1 ", normalized)
     normalized = re.sub(r"\b(\d{1,2})(?:st|nd|rd|th|t)\s+([A-Z][a-z]+|[A-Z]+)\b", r"\1 \2", normalized)
     normalized = re.sub(r"\b([A-Za-z]+),(\d{4})\b", r"\1, \2", normalized)
     normalized = re.sub(r"\b([A-Za-z]+)(\d{1,2})\b", r"\1 \2", normalized)

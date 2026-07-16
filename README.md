@@ -56,7 +56,7 @@ supporting record, or obligation can have real consequences:
 | Capability | Result |
 |---|---|
 | Multi-format extraction | Reads PDF, DOCX, TXT, MD, PNG, and JPG files |
-| OCR fallback | Uses Tesseract or RapidOCR when direct text extraction is insufficient |
+| OCR fallback | Uses Tesseract or RapidOCR for images and scanned PDF pages |
 | Structured findings | Surfaces dates, deadlines, fees, documents, duties, contacts, and risks |
 | Priority analysis | Explains why findings are marked high, medium, or low priority |
 | Action planning | Converts findings into a persistent, filterable checklist |
@@ -221,7 +221,7 @@ npm run check
 
 This checkpoint validates:
 
-- 80 backend tests
+- 84 backend tests
 - 8 frontend tests
 - OpenAPI contract freshness
 - Raw TypeScript contract freshness
@@ -236,6 +236,57 @@ python -m pytest -c backend/pytest.ini backend/tests
 npm run build --prefix server
 npm run check --prefix frontend
 npm run check:api
+```
+
+## Evaluation benchmark
+
+Papervault includes a deterministic, privacy-safe evaluation pack for the local
+retrieval and extractive-Q&A pipeline:
+
+```bash
+npm run evaluate
+```
+
+The current benchmark contains 17 questions across five representative
+documents:
+
+- University admission offer
+- Revenue authority notice
+- Software support agreement
+- Invoice
+- Consular appointment notice
+
+It measures answer accuracy, retrieval hit@1, retrieval hit@3, source
+grounding, and false positives on questions whose answers are absent. The
+baseline uses hashing embeddings and extractive-only mode, so it does not
+depend on downloaded models or a running model service.
+
+Current deterministic baseline:
+
+| Metric | Result |
+|---|---:|
+| Answer accuracy | 100% |
+| Retrieval hit@1 | 100% |
+| Retrieval hit@3 | 100% |
+| Grounded source rate | 100% |
+| Negative-case accuracy | 100% |
+
+The OCR extension adds a high-contrast PNG and a raster-only PDF with no
+embedded text. It verifies local OCR detection, extraction quality, recovered
+dates and amounts, and four downstream grounded questions.
+
+| OCR metric | Result |
+|---|---:|
+| File extraction accuracy | 100% |
+| OCR detection accuracy | 100% |
+| Quality threshold pass rate | 100% |
+| Downstream Q&A accuracy | 100% |
+
+Individual benchmark commands:
+
+```bash
+npm run evaluate:qa
+npm run evaluate:ocr
 ```
 
 ## API surface
@@ -295,7 +346,7 @@ papervault/
 - Docker and Compose development environment
 - One-click development container
 - Multi-document collections and cross-document retrieval
-- Expanded evaluation set for OCR and retrieval quality
+- Add rotated, low-contrast, and multi-page OCR stress cases
 
 ## License
 

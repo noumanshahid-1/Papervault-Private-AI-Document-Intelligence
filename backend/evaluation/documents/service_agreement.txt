@@ -1,0 +1,22 @@
+SOFTWARE SUPPORT AGREEMENT
+
+This agreement is between Meridian Systems Ltd. and Example Trading Company.
+The service term begins on 1 January 2026 and continues for twelve months.
+
+Meridian Systems will provide application monitoring, incident triage, and
+monthly maintenance reports. Critical incidents will receive an initial
+response within four business hours.
+
+The monthly service fee is USD 1,200, payable within ten days after receipt of
+each invoice. Approved work outside the support scope will be charged
+separately only after written authorization from the customer.
+
+Either party may terminate this agreement by giving 30 days' written notice.
+A material breach that remains unresolved for fourteen days after written
+notice permits immediate termination.
+
+Confidential information must be protected using reasonable safeguards and may
+only be shared with personnel who need it to perform the agreement.
+
+This agreement is governed by the laws of the Province of Ontario. Notices
+under this agreement must be sent to contracts@meridian.example.

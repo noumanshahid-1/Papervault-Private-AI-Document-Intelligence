@@ -1,0 +1,58 @@
+{
+  "version": 1,
+  "description": "High-contrast image and scanned-PDF cases for local OCR evaluation.",
+  "cases": [
+    {
+      "id": "appointment-image-ocr",
+      "document": "ocr_documents/appointment-notice.png",
+      "content_type": "image/png",
+      "expected_text_contains": [
+        "CONSULAR APPOINTMENT NOTICE",
+        "22 October 2026",
+        "10 October 2026",
+        "Current passport and two recent photographs",
+        "EUR 90",
+        "appointments@consular.example"
+      ],
+      "minimum_confidence_score": 0.8,
+      "questions": [
+        {
+          "question": "When is the document review appointment?",
+          "expected_answer_contains": ["22 October 2026"]
+        },
+        {
+          "question": "Which documents are required?",
+          "expected_answer_contains": [
+            "Current passport",
+            "two recent photographs"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "payment-scanned-pdf-ocr",
+      "document": "ocr_documents/payment-notice-scan.pdf",
+      "content_type": "application/pdf",
+      "expected_page_count": 1,
+      "expected_text_contains": [
+        "PAYMENT NOTICE",
+        "USD 2,700",
+        "31 March 2026",
+        "Bank transfer through the customer portal",
+        "billing@meridian.example",
+        "MS-2026-041"
+      ],
+      "minimum_confidence_score": 0.8,
+      "questions": [
+        {
+          "question": "What is the total amount due?",
+          "expected_answer_contains": ["USD 2,700"]
+        },
+        {
+          "question": "When is the payment deadline?",
+          "expected_answer_contains": ["31 March 2026"]
+        }
+      ]
+    }
+  ]
+}
