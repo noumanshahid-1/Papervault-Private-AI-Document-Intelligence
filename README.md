@@ -221,7 +221,7 @@ npm run check
 
 This checkpoint validates:
 
-- 84 backend tests
+- 85 backend tests
 - 8 frontend tests
 - OpenAPI contract freshness
 - Raw TypeScript contract freshness
@@ -271,9 +271,10 @@ Current deterministic baseline:
 | Grounded source rate | 100% |
 | Negative-case accuracy | 100% |
 
-The OCR extension adds a high-contrast PNG and a raster-only PDF with no
-embedded text. It verifies local OCR detection, extraction quality, recovered
-dates and amounts, and four downstream grounded questions.
+The OCR extension includes five files across baseline image, baseline
+raster-only PDF, rotated image, low-contrast image, and two-page scanned PDF
+profiles. It verifies local OCR detection, extraction quality, page aggregation,
+recovered dates and amounts, and fourteen downstream grounded questions.
 
 | OCR metric | Result |
 |---|---:|
@@ -346,7 +347,7 @@ papervault/
 - Docker and Compose development environment
 - One-click development container
 - Multi-document collections and cross-document retrieval
-- Add rotated, low-contrast, and multi-page OCR stress cases
+- Add noisy camera captures and mixed embedded-text/scanned PDF cases
 
 ## License
 

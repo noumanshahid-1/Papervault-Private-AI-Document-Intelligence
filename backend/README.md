@@ -37,7 +37,8 @@ npm run evaluate
 The evaluation pack contains fictional admission, government notice, contract,
 invoice, and appointment documents, plus image and raster-only PDF fixtures. It
 reports retrieval, answer, grounding, negative-case, OCR extraction, quality,
-and downstream Q&A accuracy.
+and downstream Q&A accuracy. OCR profiles include rotation, low contrast, and
+multi-page page aggregation.
 
 Export the canonical OpenAPI document used by the frontend:
 

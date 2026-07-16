@@ -37,5 +37,6 @@ python scripts/evaluate_ocr.py --json
 ```
 
 The Q&A evaluator uses deterministic hashing embeddings and extractive-only
-mode. The OCR evaluator processes a high-contrast PNG and a raster-only PDF,
-then asks grounded questions against the recovered text.
+mode. The OCR evaluator processes five files across baseline image, baseline
+scanned PDF, rotated image, low-contrast image, and multi-page scanned PDF
+profiles, then asks grounded questions against the recovered text.

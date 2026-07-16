@@ -27,6 +27,7 @@ class OCRQuestion:
 @dataclass(frozen=True)
 class OCRCase:
     case_id: str
+    profile: str
     document_path: Path
     content_type: str
     expected_text_contains: tuple[str, ...]
@@ -45,6 +46,7 @@ class OCRQuestionResult:
 @dataclass(frozen=True)
 class OCRCaseResult:
     case_id: str
+    profile: str
     passed: bool
     extraction_correct: bool
     ocr_detected: bool
@@ -160,6 +162,7 @@ def _parse_case(raw_case: object, dataset_root: Path) -> OCRCase:
 
     return OCRCase(
         case_id=case_id,
+        profile=_required_text(raw_case, "profile"),
         document_path=document_path,
         content_type=_required_text(raw_case, "content_type"),
         expected_text_contains=_text_list(raw_case.get("expected_text_contains")),
@@ -237,6 +240,7 @@ def _evaluate_case(case: OCRCase) -> OCRCaseResult:
     passed = extraction_correct and ocr_detected and quality_passed and qa_accuracy == 1
     return OCRCaseResult(
         case_id=case.case_id,
+        profile=case.profile,
         passed=passed,
         extraction_correct=extraction_correct,
         ocr_detected=ocr_detected,

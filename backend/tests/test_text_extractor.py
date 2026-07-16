@@ -9,7 +9,11 @@ from app.main import app
 from app.models.schemas import UploadedDocument
 from app.services.document_loader import UnsupportedDocumentTypeError, load_document
 from app.services.text_extractor import extract_text
-from app.utils.text_cleaning import normalize_extracted_text, normalize_whitespace
+from app.utils.text_cleaning import (
+    normalize_extracted_text,
+    normalize_ocr_artifacts,
+    normalize_whitespace,
+)
 
 
 def test_normalize_whitespace_collapses_spacing() -> None:
@@ -21,6 +25,26 @@ def test_normalize_extracted_text_preserves_paragraph_breaks() -> None:
 
     assert normalize_extracted_text(raw) == (
         "First line has gaps.\n\nSecond line.\nThird line."
+    )
+
+
+def test_normalize_ocr_artifacts_splits_fused_document_labels() -> None:
+    raw = (
+        "RESIDENCEAPPLICATION\n"
+        "INTERVIEWDATE\n"
+        "14January2027\n"
+        "SUBMISSIONDEADLINE\n"
+        "APPLICATIONFEE\n"
+        "EUR120"
+    )
+
+    assert normalize_ocr_artifacts(raw) == (
+        "RESIDENCE APPLICATION\n"
+        "INTERVIEW DATE\n"
+        "14 January 2027\n"
+        "SUBMISSION DEADLINE\n"
+        "APPLICATION FEE\n"
+        "EUR 120"
     )
 
 

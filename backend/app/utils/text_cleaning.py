@@ -52,6 +52,32 @@ def normalize_ocr_artifacts(text: str) -> str:
         normalized = normalized.replace(source, target)
 
     normalized = normalized.replace("，", ",").replace("（", "(").replace("）", ")")
+    field_words = (
+        "APPLICATION",
+        "APPOINTMENT",
+        "CATEGORY",
+        "CONTACT",
+        "DEADLINE",
+        "DEPOSIT",
+        "DOCUMENTS",
+        "FEE",
+        "LICENSE",
+        "METHOD",
+        "OFFICE",
+        "RECORD",
+        "REFERENCE",
+        "RENEWAL",
+        "START",
+        "DATE",
+        "AMOUNT",
+        "DUE",
+    )
+    for field_word in field_words:
+        normalized = re.sub(
+            rf"(?<=[A-Z])(?={field_word}\b)",
+            " ",
+            normalized,
+        )
     month_names = (
         "January|February|March|April|May|June|July|August|September|October|"
         "November|December|Jan|Feb|Mar|Apr|Jun|Jul|Aug|Sep|Sept|Oct|Nov|Dec"

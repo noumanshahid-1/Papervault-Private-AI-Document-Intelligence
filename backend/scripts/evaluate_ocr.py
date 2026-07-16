@@ -60,8 +60,8 @@ def _print_scorecard(report: OCRReport) -> None:
     for result in report.results:
         status = "PASS" if result.passed else "FAIL"
         print(
-            f"{status:4}  {result.case_id:34} engine={result.engine:18} "
-            f"quality={result.confidence_score:.3f}"
+            f"{status:4}  {result.case_id:38} profile={result.profile:22} "
+            f"engine={result.engine:18} quality={result.confidence_score:.3f}"
         )
         if not result.passed:
             for question in result.question_results:
