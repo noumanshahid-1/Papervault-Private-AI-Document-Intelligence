@@ -1,0 +1,6 @@
+import { NextFunction, Request, Response } from "express";
+
+export function requestLogger(req: Request, _res: Response, next: NextFunction): void {
+  console.log(`[BFF] ${req.method} ${req.path}`);
+  next();
+}

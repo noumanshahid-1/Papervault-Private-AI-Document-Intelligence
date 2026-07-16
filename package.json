@@ -1,0 +1,25 @@
+{
+  "name": "papervault",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "concurrently -n backend,server,frontend -c cyan,yellow,magenta \"npm run dev:backend\" \"npm run dev:server\" \"npm run dev:frontend\"",
+    "dev:backend": "npm run dev --prefix backend",
+    "dev:server": "npm run dev --prefix server",
+    "dev:frontend": "npm run dev --prefix frontend",
+    "build": "npm run build --prefix server && npm run build --prefix frontend",
+    "generate:openapi": "python backend/scripts/export_openapi.py frontend/src/lib/openapi.json",
+    "generate:api": "npm run generate:openapi && npx --yes --package openapi-typescript@7.13.0 openapi-typescript frontend/src/lib/openapi.json -o frontend/src/lib/api.generated.ts --alphabetize",
+    "check:openapi": "python backend/scripts/export_openapi.py frontend/src/lib/openapi.json --check",
+    "check:api-types": "npm run check:api-types --prefix frontend",
+    "check:api": "npm run check:openapi && npm run check:api-types",
+    "test:backend": "npm test --prefix backend",
+    "check:server": "npm run build --prefix server",
+    "check:frontend": "npm run check --prefix frontend",
+    "check": "npm run test:backend && npm run check:api && npm run check:server && npm run check:frontend"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.2",
+    "openapi-typescript": "^7.13.0"
+  }
+}

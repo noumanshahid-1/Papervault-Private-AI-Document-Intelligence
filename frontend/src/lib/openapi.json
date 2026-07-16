@@ -1,0 +1,1858 @@
+{
+  "components": {
+    "schemas": {
+      "AnalyzeRequest": {
+        "description": "Request body for analyzing already-extracted document text.",
+        "properties": {
+          "filename": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Optional source filename.",
+            "title": "Filename"
+          },
+          "text": {
+            "description": "Extracted document text to analyze.",
+            "title": "Text",
+            "type": "string"
+          }
+        },
+        "required": [
+          "text"
+        ],
+        "title": "AnalyzeRequest",
+        "type": "object"
+      },
+      "AnswerExplanation": {
+        "description": "Human-readable basis for an answer and its confidence.",
+        "properties": {
+          "confidence_reasons": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Confidence Reasons",
+            "type": "array"
+          },
+          "limitations": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Limitations",
+            "type": "array"
+          },
+          "strategy": {
+            "default": "no_answer",
+            "title": "Strategy",
+            "type": "string"
+          }
+        },
+        "title": "AnswerExplanation",
+        "type": "object"
+      },
+      "AskRequest": {
+        "description": "Request body for local document question answering.",
+        "properties": {
+          "answer_mode": {
+            "default": "auto",
+            "description": "Preferred answer mode. Local LLM mode still falls back safely.",
+            "enum": [
+              "auto",
+              "extractive",
+              "local_llm"
+            ],
+            "title": "Answer Mode",
+            "type": "string"
+          },
+          "filename": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Optional source filename.",
+            "title": "Filename"
+          },
+          "model": {
+            "anyOf": [
+              {
+                "maxLength": 200,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Optional installed Ollama model override for this question.",
+            "title": "Model"
+          },
+          "question": {
+            "description": "Question to answer from the document.",
+            "title": "Question",
+            "type": "string"
+          },
+          "text": {
+            "description": "Extracted document text to search.",
+            "title": "Text",
+            "type": "string"
+          },
+          "top_k": {
+            "default": 5,
+            "description": "Number of chunks to retrieve.",
+            "maximum": 10.0,
+            "minimum": 1.0,
+            "title": "Top K",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "text",
+          "question"
+        ],
+        "title": "AskRequest",
+        "type": "object"
+      },
+      "Body_extract_document_documents_extract_post": {
+        "properties": {
+          "file": {
+            "contentMediaType": "application/octet-stream",
+            "title": "File",
+            "type": "string"
+          }
+        },
+        "required": [
+          "file"
+        ],
+        "title": "Body_extract_document_documents_extract_post",
+        "type": "object"
+      },
+      "ChecklistItem": {
+        "description": "Actionable checklist item derived from grounded document insights.",
+        "properties": {
+          "due_date": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Associated due date if known.",
+            "title": "Due Date"
+          },
+          "priority": {
+            "description": "high, medium, or low.",
+            "title": "Priority",
+            "type": "string"
+          },
+          "reason": {
+            "description": "Why this task matters.",
+            "title": "Reason",
+            "type": "string"
+          },
+          "source_snippet": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Source text that supports this task.",
+            "title": "Source Snippet"
+          },
+          "status": {
+            "default": "pending",
+            "description": "Checklist status.",
+            "title": "Status",
+            "type": "string"
+          },
+          "title": {
+            "description": "Short action title.",
+            "title": "Title",
+            "type": "string"
+          }
+        },
+        "required": [
+          "title",
+          "reason",
+          "priority"
+        ],
+        "title": "ChecklistItem",
+        "type": "object"
+      },
+      "ChecklistResult": {
+        "description": "Checklist and risk panel generated from document insights.",
+        "properties": {
+          "guidance": {
+            "description": "User-facing guidance for the checklist result.",
+            "title": "Guidance",
+            "type": "string"
+          },
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/ChecklistItem"
+            },
+            "title": "Items",
+            "type": "array"
+          },
+          "risks": {
+            "items": {
+              "$ref": "#/components/schemas/RiskPanelItem"
+            },
+            "title": "Risks",
+            "type": "array"
+          }
+        },
+        "required": [
+          "guidance"
+        ],
+        "title": "ChecklistResult",
+        "type": "object"
+      },
+      "ClassificationResult": {
+        "description": "Deterministic document classification result.",
+        "properties": {
+          "confidence": {
+            "description": "low, medium, or high.",
+            "title": "Confidence",
+            "type": "string"
+          },
+          "document_type": {
+            "description": "Best matching document category.",
+            "title": "Document Type",
+            "type": "string"
+          },
+          "evidence": {
+            "description": "Document snippets that supported classification.",
+            "items": {
+              "type": "string"
+            },
+            "title": "Evidence",
+            "type": "array"
+          }
+        },
+        "required": [
+          "document_type",
+          "confidence"
+        ],
+        "title": "ClassificationResult",
+        "type": "object"
+      },
+      "DocumentAnalysisDiagnostics": {
+        "description": "Signals used to explain document-analysis confidence.",
+        "properties": {
+          "classification_confidence": {
+            "default": "low",
+            "title": "Classification Confidence",
+            "type": "string"
+          },
+          "confidence_score": {
+            "default": 0.0,
+            "maximum": 1.0,
+            "minimum": 0.0,
+            "title": "Confidence Score",
+            "type": "number"
+          },
+          "extracted_signal_count": {
+            "default": 0,
+            "minimum": 0.0,
+            "title": "Extracted Signal Count",
+            "type": "integer"
+          },
+          "grounded_field_count": {
+            "default": 0,
+            "minimum": 0.0,
+            "title": "Grounded Field Count",
+            "type": "integer"
+          },
+          "reasons": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Reasons",
+            "type": "array"
+          }
+        },
+        "title": "DocumentAnalysisDiagnostics",
+        "type": "object"
+      },
+      "DocumentInsight": {
+        "description": "Structured document insights derived from extracted text.",
+        "properties": {
+          "action_items": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Action Items",
+            "type": "array"
+          },
+          "classification": {
+            "$ref": "#/components/schemas/ClassificationResult",
+            "description": "Document classification."
+          },
+          "confidence": {
+            "description": "Overall extraction confidence.",
+            "title": "Confidence",
+            "type": "string"
+          },
+          "contact_information": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Contact Information",
+            "type": "array"
+          },
+          "diagnostics": {
+            "$ref": "#/components/schemas/DocumentAnalysisDiagnostics"
+          },
+          "fees_or_amounts": {
+            "items": {
+              "$ref": "#/components/schemas/ExtractedItem"
+            },
+            "title": "Fees Or Amounts",
+            "type": "array"
+          },
+          "important_dates": {
+            "items": {
+              "$ref": "#/components/schemas/ExtractedItem"
+            },
+            "title": "Important Dates",
+            "type": "array"
+          },
+          "limitations": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Limitations",
+            "type": "array"
+          },
+          "missing_information": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Missing Information",
+            "type": "array"
+          },
+          "official_notice": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/OfficialNoticeBreakdown"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "required_documents": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Required Documents",
+            "type": "array"
+          },
+          "risks": {
+            "items": {
+              "$ref": "#/components/schemas/RiskInsight"
+            },
+            "title": "Risks",
+            "type": "array"
+          },
+          "summary": {
+            "description": "Short extractive summary.",
+            "title": "Summary",
+            "type": "string"
+          },
+          "title": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Likely document title.",
+            "title": "Title"
+          }
+        },
+        "required": [
+          "classification",
+          "summary",
+          "confidence"
+        ],
+        "title": "DocumentInsight",
+        "type": "object"
+      },
+      "ExtractedItem": {
+        "description": "A grounded extracted value with optional source text.",
+        "properties": {
+          "source_snippet": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Nearby source text from the document.",
+            "title": "Source Snippet"
+          },
+          "value": {
+            "description": "Extracted value.",
+            "title": "Value",
+            "type": "string"
+          }
+        },
+        "required": [
+          "value"
+        ],
+        "title": "ExtractedItem",
+        "type": "object"
+      },
+      "ExtractionDiagnostics": {
+        "description": "Explainable quality assessment for locally extracted text.",
+        "properties": {
+          "character_count": {
+            "default": 0,
+            "minimum": 0.0,
+            "title": "Character Count",
+            "type": "integer"
+          },
+          "confidence": {
+            "default": "low",
+            "description": "low, medium, or high.",
+            "title": "Confidence",
+            "type": "string"
+          },
+          "confidence_score": {
+            "default": 0.0,
+            "description": "Normalized extraction quality score.",
+            "maximum": 1.0,
+            "minimum": 0.0,
+            "title": "Confidence Score",
+            "type": "number"
+          },
+          "engine": {
+            "default": "unknown",
+            "description": "Extraction or OCR engine used.",
+            "title": "Engine",
+            "type": "string"
+          },
+          "is_ocr": {
+            "default": false,
+            "description": "Whether OCR produced the text.",
+            "title": "Is Ocr",
+            "type": "boolean"
+          },
+          "ocr_engine": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "OCR engine name when used.",
+            "title": "Ocr Engine"
+          },
+          "ocr_mean_confidence": {
+            "anyOf": [
+              {
+                "maximum": 1.0,
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Mean OCR token confidence when the engine exposes it.",
+            "title": "Ocr Mean Confidence"
+          },
+          "page_text_coverage": {
+            "anyOf": [
+              {
+                "maximum": 1.0,
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Share of pages containing meaningful text.",
+            "title": "Page Text Coverage"
+          },
+          "readable_character_ratio": {
+            "default": 0.0,
+            "maximum": 1.0,
+            "minimum": 0.0,
+            "title": "Readable Character Ratio",
+            "type": "number"
+          },
+          "recommendations": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Recommendations",
+            "type": "array"
+          },
+          "signals": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Signals",
+            "type": "array"
+          },
+          "suspicious_character_ratio": {
+            "default": 0.0,
+            "maximum": 1.0,
+            "minimum": 0.0,
+            "title": "Suspicious Character Ratio",
+            "type": "number"
+          },
+          "word_count": {
+            "default": 0,
+            "minimum": 0.0,
+            "title": "Word Count",
+            "type": "integer"
+          }
+        },
+        "title": "ExtractionDiagnostics",
+        "type": "object"
+      },
+      "ExtractionError": {
+        "description": "Structured extraction error suitable for user-facing feedback.",
+        "properties": {
+          "code": {
+            "description": "Stable machine-readable error code.",
+            "title": "Code",
+            "type": "string"
+          },
+          "message": {
+            "description": "Human-readable error message.",
+            "title": "Message",
+            "type": "string"
+          }
+        },
+        "required": [
+          "code",
+          "message"
+        ],
+        "title": "ExtractionError",
+        "type": "object"
+      },
+      "ExtractionResult": {
+        "description": "Result of extracting text from a document without interpretation.",
+        "properties": {
+          "diagnostics": {
+            "$ref": "#/components/schemas/ExtractionDiagnostics"
+          },
+          "document_type": {
+            "description": "Document extension without leading dot.",
+            "title": "Document Type",
+            "type": "string"
+          },
+          "error": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ExtractionError"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Structured error when extraction could not complete."
+          },
+          "filename": {
+            "description": "Source filename.",
+            "title": "Filename",
+            "type": "string"
+          },
+          "metadata": {
+            "additionalProperties": true,
+            "description": "Local extraction metadata.",
+            "title": "Metadata",
+            "type": "object"
+          },
+          "page_count": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Number of pages when known.",
+            "title": "Page Count"
+          },
+          "text": {
+            "description": "Clean extracted text.",
+            "title": "Text",
+            "type": "string"
+          },
+          "warnings": {
+            "description": "Non-fatal warnings.",
+            "items": {
+              "type": "string"
+            },
+            "title": "Warnings",
+            "type": "array"
+          }
+        },
+        "required": [
+          "filename",
+          "document_type",
+          "text"
+        ],
+        "title": "ExtractionResult",
+        "type": "object"
+      },
+      "GenerationDiagnostics": {
+        "description": "Explain which local answer generator ran and whether fallback occurred.",
+        "properties": {
+          "actual_mode": {
+            "default": "extractive",
+            "title": "Actual Mode",
+            "type": "string"
+          },
+          "configured_model": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Configured Model"
+          },
+          "fallback_reason": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Fallback Reason"
+          },
+          "local_llm_enabled": {
+            "default": false,
+            "title": "Local Llm Enabled",
+            "type": "boolean"
+          },
+          "model_used": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Model Used"
+          },
+          "requested_mode": {
+            "default": "auto",
+            "title": "Requested Mode",
+            "type": "string"
+          }
+        },
+        "title": "GenerationDiagnostics",
+        "type": "object"
+      },
+      "HTTPValidationError": {
+        "properties": {
+          "detail": {
+            "items": {
+              "$ref": "#/components/schemas/ValidationError"
+            },
+            "title": "Detail",
+            "type": "array"
+          }
+        },
+        "title": "HTTPValidationError",
+        "type": "object"
+      },
+      "HealthResponse": {
+        "description": "Response model for backend health checks.",
+        "properties": {
+          "app": {
+            "description": "Application name.",
+            "title": "App",
+            "type": "string"
+          },
+          "status": {
+            "description": "Service status.",
+            "title": "Status",
+            "type": "string"
+          }
+        },
+        "required": [
+          "status",
+          "app"
+        ],
+        "title": "HealthResponse",
+        "type": "object"
+      },
+      "IntelligenceRuntimeResponse": {
+        "description": "Local intelligence runtime configuration and availability.",
+        "properties": {
+          "available_models": {
+            "items": {
+              "$ref": "#/components/schemas/LocalModelInfo"
+            },
+            "title": "Available Models",
+            "type": "array"
+          },
+          "configured_model": {
+            "description": "Default configured Ollama model.",
+            "title": "Configured Model",
+            "type": "string"
+          },
+          "embedding_model": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Embedding Model"
+          },
+          "embedding_provider": {
+            "description": "Configured local embedding provider.",
+            "title": "Embedding Provider",
+            "type": "string"
+          },
+          "local_llm_enabled": {
+            "description": "Whether local LLM use is enabled.",
+            "title": "Local Llm Enabled",
+            "type": "boolean"
+          },
+          "ollama_available": {
+            "description": "Whether the configured Ollama runtime responded.",
+            "title": "Ollama Available",
+            "type": "boolean"
+          },
+          "status_message": {
+            "description": "Plain-language local runtime status.",
+            "title": "Status Message",
+            "type": "string"
+          },
+          "vector_backend": {
+            "description": "Available vector-search backend.",
+            "title": "Vector Backend",
+            "type": "string"
+          }
+        },
+        "required": [
+          "local_llm_enabled",
+          "ollama_available",
+          "configured_model",
+          "embedding_provider",
+          "vector_backend",
+          "status_message"
+        ],
+        "title": "IntelligenceRuntimeResponse",
+        "type": "object"
+      },
+      "LocalModelInfo": {
+        "description": "Installed model reported by the local Ollama runtime.",
+        "properties": {
+          "modified_at": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Modified At"
+          },
+          "name": {
+            "description": "Ollama model name.",
+            "title": "Name",
+            "type": "string"
+          },
+          "size_bytes": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Size Bytes"
+          }
+        },
+        "required": [
+          "name"
+        ],
+        "title": "LocalModelInfo",
+        "type": "object"
+      },
+      "OfficialNoticeBreakdown": {
+        "description": "Domain-specific breakdown for government notices and gazette notifications.",
+        "properties": {
+          "compliance_duties": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Compliance Duties",
+            "type": "array"
+          },
+          "confidence": {
+            "default": "low",
+            "description": "low, medium, or high.",
+            "title": "Confidence",
+            "type": "string"
+          },
+          "consequences": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Consequences",
+            "type": "array"
+          },
+          "effective_timing": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Effective Timing"
+          },
+          "gazette_date": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Gazette Date"
+          },
+          "issue_date": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Issue Date"
+          },
+          "issuing_authority": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Issuing Authority"
+          },
+          "legal_basis": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Legal Basis"
+          },
+          "limitations": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Limitations",
+            "type": "array"
+          },
+          "notice_number": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Notice Number"
+          },
+          "notice_type": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Notice Type"
+          },
+          "payment_timing": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Payment Timing"
+          },
+          "subject": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Subject"
+          },
+          "table_rows": {
+            "items": {
+              "$ref": "#/components/schemas/OfficialNoticeTableRow"
+            },
+            "title": "Table Rows",
+            "type": "array"
+          }
+        },
+        "title": "OfficialNoticeBreakdown",
+        "type": "object"
+      },
+      "OfficialNoticeTableRow": {
+        "description": "Structured row recovered from an official notice table.",
+        "properties": {
+          "heading": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Schedule heading or code.",
+            "title": "Heading"
+          },
+          "liable_party": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Person or party made liable.",
+            "title": "Liable Party"
+          },
+          "rate_or_amount": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Rate, fee, or amount.",
+            "title": "Rate Or Amount"
+          },
+          "service": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Taxable service or subject.",
+            "title": "Service"
+          },
+          "source_snippet": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Grounding source text.",
+            "title": "Source Snippet"
+          }
+        },
+        "title": "OfficialNoticeTableRow",
+        "type": "object"
+      },
+      "QuestionAnswer": {
+        "description": "Grounded answer produced from local document retrieval.",
+        "properties": {
+          "answer": {
+            "description": "Answer grounded in source snippets.",
+            "title": "Answer",
+            "type": "string"
+          },
+          "confidence": {
+            "description": "low, medium, or high.",
+            "title": "Confidence",
+            "type": "string"
+          },
+          "explanation": {
+            "$ref": "#/components/schemas/AnswerExplanation"
+          },
+          "generation": {
+            "$ref": "#/components/schemas/GenerationDiagnostics"
+          },
+          "mode": {
+            "description": "Answering mode, such as extractive or local_llm.",
+            "title": "Mode",
+            "type": "string"
+          },
+          "retrieval": {
+            "$ref": "#/components/schemas/RetrievalDiagnostics"
+          },
+          "source_snippets": {
+            "items": {
+              "$ref": "#/components/schemas/SourceSnippet"
+            },
+            "title": "Source Snippets",
+            "type": "array"
+          }
+        },
+        "required": [
+          "answer",
+          "confidence",
+          "mode"
+        ],
+        "title": "QuestionAnswer",
+        "type": "object"
+      },
+      "RetrievalDiagnostics": {
+        "description": "Explain how document chunks were selected for an answer.",
+        "properties": {
+          "embedding_model": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Embedding Model"
+          },
+          "embedding_provider": {
+            "default": "unknown",
+            "title": "Embedding Provider",
+            "type": "string"
+          },
+          "matched_terms": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Matched Terms",
+            "type": "array"
+          },
+          "mean_score": {
+            "default": 0.0,
+            "title": "Mean Score",
+            "type": "number"
+          },
+          "query_terms": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Query Terms",
+            "type": "array"
+          },
+          "relevant_count": {
+            "default": 0,
+            "minimum": 0.0,
+            "title": "Relevant Count",
+            "type": "integer"
+          },
+          "requested_top_k": {
+            "default": 0,
+            "minimum": 0.0,
+            "title": "Requested Top K",
+            "type": "integer"
+          },
+          "retrieved_count": {
+            "default": 0,
+            "minimum": 0.0,
+            "title": "Retrieved Count",
+            "type": "integer"
+          },
+          "score_spread": {
+            "default": 0.0,
+            "title": "Score Spread",
+            "type": "number"
+          },
+          "top_score": {
+            "default": 0.0,
+            "title": "Top Score",
+            "type": "number"
+          },
+          "vector_backend": {
+            "default": "python",
+            "title": "Vector Backend",
+            "type": "string"
+          },
+          "warnings": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Warnings",
+            "type": "array"
+          }
+        },
+        "title": "RetrievalDiagnostics",
+        "type": "object"
+      },
+      "RiskInsight": {
+        "description": "Carefully worded possible risk grounded in document text.",
+        "properties": {
+          "confidence": {
+            "description": "low, medium, or high.",
+            "title": "Confidence",
+            "type": "string"
+          },
+          "issue": {
+            "description": "Possible issue, not a definitive conclusion.",
+            "title": "Issue",
+            "type": "string"
+          },
+          "source_snippet": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Grounding snippet.",
+            "title": "Source Snippet"
+          },
+          "suggested_verification": {
+            "description": "Recommended verification step.",
+            "title": "Suggested Verification",
+            "type": "string"
+          },
+          "why_it_matters": {
+            "description": "Plain-language reason to verify it.",
+            "title": "Why It Matters",
+            "type": "string"
+          }
+        },
+        "required": [
+          "issue",
+          "why_it_matters",
+          "suggested_verification",
+          "confidence"
+        ],
+        "title": "RiskInsight",
+        "type": "object"
+      },
+      "RiskPanelItem": {
+        "description": "Risk panel item with careful non-advisory wording.",
+        "properties": {
+          "confidence_level": {
+            "description": "low, medium, or high.",
+            "title": "Confidence Level",
+            "type": "string"
+          },
+          "possible_issue": {
+            "description": "Possible issue found in the document.",
+            "title": "Possible Issue",
+            "type": "string"
+          },
+          "source_snippet": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Grounding source text.",
+            "title": "Source Snippet"
+          },
+          "suggested_verification_step": {
+            "description": "Suggested verification step.",
+            "title": "Suggested Verification Step",
+            "type": "string"
+          },
+          "why_it_matters": {
+            "description": "Why the user should verify it.",
+            "title": "Why It Matters",
+            "type": "string"
+          }
+        },
+        "required": [
+          "possible_issue",
+          "why_it_matters",
+          "suggested_verification_step",
+          "confidence_level"
+        ],
+        "title": "RiskPanelItem",
+        "type": "object"
+      },
+      "SaveSessionRequest": {
+        "description": "Request body for saving a document review session from the frontend.",
+        "properties": {
+          "checklist": {
+            "$ref": "#/components/schemas/ChecklistResult",
+            "description": "Full checklist to persist for reload."
+          },
+          "document_type": {
+            "description": "Classified document type.",
+            "title": "Document Type",
+            "type": "string"
+          },
+          "extracted_text": {
+            "description": "Extracted text used for hashing. It is retained only when PAPERVAULT_STORE_EXTRACTED_TEXT is explicitly enabled.",
+            "title": "Extracted Text",
+            "type": "string"
+          },
+          "filename": {
+            "description": "Source filename.",
+            "title": "Filename",
+            "type": "string"
+          },
+          "insight": {
+            "$ref": "#/components/schemas/DocumentInsight",
+            "description": "Full document insight to persist for reload."
+          }
+        },
+        "required": [
+          "filename",
+          "document_type",
+          "extracted_text",
+          "insight",
+          "checklist"
+        ],
+        "title": "SaveSessionRequest",
+        "type": "object"
+      },
+      "SavedSession": {
+        "description": "Saved session with structured outputs and Q&A history.",
+        "properties": {
+          "checklist": {
+            "$ref": "#/components/schemas/ChecklistResult",
+            "description": "Generated checklist and risk panel."
+          },
+          "content_stored": {
+            "default": false,
+            "description": "Whether raw extracted text was explicitly retained for this session.",
+            "title": "Content Stored",
+            "type": "boolean"
+          },
+          "created_at": {
+            "description": "UTC creation timestamp.",
+            "title": "Created At",
+            "type": "string"
+          },
+          "document_type": {
+            "description": "Classified document type.",
+            "title": "Document Type",
+            "type": "string"
+          },
+          "extracted_text": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Raw extracted text when local full-content history is explicitly enabled.",
+            "title": "Extracted Text"
+          },
+          "extracted_text_hash": {
+            "description": "SHA-256 hash of extracted text.",
+            "title": "Extracted Text Hash",
+            "type": "string"
+          },
+          "filename": {
+            "description": "Source filename.",
+            "title": "Filename",
+            "type": "string"
+          },
+          "insight": {
+            "$ref": "#/components/schemas/DocumentInsight",
+            "description": "Structured document insight."
+          },
+          "qa_history": {
+            "items": {
+              "$ref": "#/components/schemas/QuestionAnswer"
+            },
+            "title": "Qa History",
+            "type": "array"
+          },
+          "session_id": {
+            "description": "Local session identifier.",
+            "title": "Session Id",
+            "type": "string"
+          },
+          "text_preview": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Always None unless explicitly configured later.",
+            "title": "Text Preview"
+          }
+        },
+        "required": [
+          "session_id",
+          "filename",
+          "document_type",
+          "extracted_text_hash",
+          "created_at",
+          "insight",
+          "checklist"
+        ],
+        "title": "SavedSession",
+        "type": "object"
+      },
+      "SessionCreatedResponse": {
+        "description": "Response returned after saving a local review session.",
+        "properties": {
+          "id": {
+            "description": "Created local session identifier.",
+            "title": "Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id"
+        ],
+        "title": "SessionCreatedResponse",
+        "type": "object"
+      },
+      "SessionMetadata": {
+        "description": "Privacy-preserving metadata for a saved local document session.",
+        "properties": {
+          "content_stored": {
+            "default": false,
+            "description": "Whether raw extracted text was explicitly retained for this session.",
+            "title": "Content Stored",
+            "type": "boolean"
+          },
+          "created_at": {
+            "description": "UTC creation timestamp.",
+            "title": "Created At",
+            "type": "string"
+          },
+          "document_type": {
+            "description": "Classified document type.",
+            "title": "Document Type",
+            "type": "string"
+          },
+          "extracted_text_hash": {
+            "description": "SHA-256 hash of extracted text.",
+            "title": "Extracted Text Hash",
+            "type": "string"
+          },
+          "filename": {
+            "description": "Source filename.",
+            "title": "Filename",
+            "type": "string"
+          },
+          "session_id": {
+            "description": "Local session identifier.",
+            "title": "Session Id",
+            "type": "string"
+          },
+          "text_preview": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Always None unless explicitly configured later.",
+            "title": "Text Preview"
+          }
+        },
+        "required": [
+          "session_id",
+          "filename",
+          "document_type",
+          "extracted_text_hash",
+          "created_at"
+        ],
+        "title": "SessionMetadata",
+        "type": "object"
+      },
+      "SessionsClearedResponse": {
+        "description": "Response returned after clearing local review history.",
+        "properties": {
+          "deleted": {
+            "description": "Whether the local history clear completed.",
+            "title": "Deleted",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "deleted"
+        ],
+        "title": "SessionsClearedResponse",
+        "type": "object"
+      },
+      "SourceSnippet": {
+        "description": "Source snippet used to ground an answer.",
+        "properties": {
+          "chunk_id": {
+            "description": "Source chunk identifier.",
+            "title": "Chunk Id",
+            "type": "string"
+          },
+          "page_number": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Source page number if known.",
+            "title": "Page Number"
+          },
+          "score": {
+            "description": "Retrieval similarity score.",
+            "title": "Score",
+            "type": "number"
+          },
+          "source_filename": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Source filename if known.",
+            "title": "Source Filename"
+          },
+          "text": {
+            "description": "Source text snippet.",
+            "title": "Text",
+            "type": "string"
+          }
+        },
+        "required": [
+          "text",
+          "chunk_id",
+          "score"
+        ],
+        "title": "SourceSnippet",
+        "type": "object"
+      },
+      "ValidationError": {
+        "properties": {
+          "ctx": {
+            "title": "Context",
+            "type": "object"
+          },
+          "input": {
+            "title": "Input"
+          },
+          "loc": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            "title": "Location",
+            "type": "array"
+          },
+          "msg": {
+            "title": "Message",
+            "type": "string"
+          },
+          "type": {
+            "title": "Error Type",
+            "type": "string"
+          }
+        },
+        "required": [
+          "loc",
+          "msg",
+          "type"
+        ],
+        "title": "ValidationError",
+        "type": "object"
+      }
+    }
+  },
+  "info": {
+    "description": "Local-first document intelligence assistant.",
+    "title": "Papervault",
+    "version": "0.1.0"
+  },
+  "openapi": "3.1.0",
+  "paths": {
+    "/documents/analyze": {
+      "post": {
+        "description": "Analyze already-extracted text and return grounded structured insights.",
+        "operationId": "analyze_extracted_document_documents_analyze_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AnalyzeRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DocumentInsight"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Analyze Extracted Document"
+      }
+    },
+    "/documents/ask": {
+      "post": {
+        "description": "Answer a question using local retrieval over provided document text.",
+        "operationId": "ask_document_documents_ask_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AskRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/QuestionAnswer"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Ask Document"
+      }
+    },
+    "/documents/checklist": {
+      "post": {
+        "description": "Generate an action checklist and risk panel from extracted document text.",
+        "operationId": "create_document_checklist_documents_checklist_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AnalyzeRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ChecklistResult"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Create Document Checklist"
+      }
+    },
+    "/documents/extract": {
+      "post": {
+        "description": "Extract text from an uploaded document without storing the original file.",
+        "operationId": "extract_document_documents_extract_post",
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_extract_document_documents_extract_post"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExtractionResult"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Extract Document"
+      }
+    },
+    "/health": {
+      "get": {
+        "description": "Return a minimal health response for smoke checks.",
+        "operationId": "health_health_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HealthResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "Health"
+      }
+    },
+    "/intelligence/runtime": {
+      "get": {
+        "description": "Return configured local model, embedding, and vector runtime diagnostics.",
+        "operationId": "intelligence_runtime_intelligence_runtime_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/IntelligenceRuntimeResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "Intelligence Runtime"
+      }
+    },
+    "/sessions": {
+      "delete": {
+        "description": "Delete every saved session and its Q&A history. Local-only, no recovery.",
+        "operationId": "clear_sessions_sessions_delete",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SessionsClearedResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "Clear Sessions"
+      },
+      "get": {
+        "description": "Return recent session metadata for the history page.",
+        "operationId": "get_sessions_sessions_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/SessionMetadata"
+                  },
+                  "title": "Response Get Sessions Sessions Get",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "Get Sessions"
+      },
+      "post": {
+        "description": "Save privacy-preserving local session history.",
+        "operationId": "create_session_sessions_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SaveSessionRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SessionCreatedResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Create Session"
+      }
+    },
+    "/sessions/{session_id}": {
+      "get": {
+        "description": "Return saved structured results and optional explicitly retained text.",
+        "operationId": "get_session_sessions__session_id__get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "session_id",
+            "required": true,
+            "schema": {
+              "title": "Session Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SavedSession"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Get Session"
+      }
+    }
+  }
+}

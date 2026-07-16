@@ -1,0 +1,17 @@
+fastapi
+uvicorn[standard]
+pydantic
+pydantic-settings
+python-multipart
+pymupdf
+pdfplumber
+python-docx
+pytesseract
+Pillow
+rapidocr-onnxruntime
+sentence-transformers
+faiss-cpu
+numpy
+requests
+pytest
+httpx
