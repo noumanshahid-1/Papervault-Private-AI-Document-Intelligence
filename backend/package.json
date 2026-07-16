@@ -4,7 +4,9 @@
   "private": true,
   "scripts": {
     "dev": "uvicorn app.main:app --reload --port 8000",
-    "evaluate": "python scripts/evaluate_qa.py",
+    "evaluate": "npm run evaluate:qa && npm run evaluate:ocr",
+    "evaluate:ocr": "python scripts/evaluate_ocr.py",
+    "evaluate:qa": "python scripts/evaluate_qa.py",
     "test": "python -m pytest"
   }
 }

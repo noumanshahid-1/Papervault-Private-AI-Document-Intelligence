@@ -28,15 +28,16 @@ python -m pytest
 python -m compileall app tests
 ```
 
-Run the deterministic retrieval and Q&A evaluation:
+Run all deterministic evaluations:
 
 ```powershell
-python scripts/evaluate_qa.py
+npm run evaluate
 ```
 
 The evaluation pack contains fictional admission, government notice, contract,
-invoice, and appointment documents. It reports answer accuracy, retrieval
-hit@1, retrieval hit@3, evidence-grounding rate, and negative-case accuracy.
+invoice, and appointment documents, plus image and raster-only PDF fixtures. It
+reports retrieval, answer, grounding, negative-case, OCR extraction, quality,
+and downstream Q&A accuracy.
 
 Export the canonical OpenAPI document used by the frontend:
 
@@ -120,7 +121,8 @@ scores, matched terms, generation mode, confidence reasons, and limitations.
 Extraction responses include the effective engine, normalized confidence score,
 readable/suspicious character ratios, PDF page-text coverage, and OCR engine
 confidence when available. Low-quality scans receive actionable local
-rescan/verification guidance.
+rescan/verification guidance. PDF pages with little or no embedded text are
+rendered locally and passed through the configured image OCR fallback.
 
 ## Data location
 

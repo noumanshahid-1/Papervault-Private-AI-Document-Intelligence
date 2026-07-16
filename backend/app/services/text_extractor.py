@@ -57,6 +57,60 @@ def _extract_pdf(document: UploadedDocument) -> ExtractionResult:
         try:
             with fitz.open(stream=document.content, filetype="pdf") as pdf:
                 pages = [page.get_text("text") for page in pdf]
+                sparse_page_indexes = [
+                    index
+                    for index, page_text in enumerate(pages)
+                    if len(page_text.strip()) < 20
+                ]
+                if sparse_page_indexes:
+                    (
+                        pages,
+                        ocr_warnings,
+                        ocr_engine,
+                        ocr_confidence,
+                        ocr_page_count,
+                        ocr_error,
+                    ) = _ocr_sparse_pdf_pages(
+                        document=document,
+                        pdf=pdf,
+                        fitz=fitz,
+                        pages=pages,
+                        sparse_page_indexes=sparse_page_indexes,
+                    )
+                    warnings.extend(ocr_warnings)
+                    if ocr_page_count:
+                        warnings.append(
+                            f"Used local OCR for {ocr_page_count} of "
+                            f"{pdf.page_count} PDF pages with little or no embedded text."
+                        )
+                        return _result(
+                            document,
+                            text=normalize_extracted_text("\n\n".join(pages)),
+                            warnings=warnings,
+                            page_count=pdf.page_count,
+                            engine=f"pymupdf+{ocr_engine or 'ocr'}",
+                            is_ocr=True,
+                            ocr_engine=ocr_engine,
+                            ocr_mean_confidence=ocr_confidence,
+                            page_text_coverage=_page_text_coverage(pages),
+                        )
+                    if not any(page.strip() for page in pages) and ocr_error:
+                        return _result(
+                            document,
+                            text="",
+                            warnings=warnings,
+                            page_count=pdf.page_count,
+                            engine="pymupdf+ocr",
+                            is_ocr=True,
+                            error=ExtractionError(
+                                code="pdf_ocr_failed",
+                                message=(
+                                    "The PDF contained no embedded text and local OCR "
+                                    f"could not recover readable content: {ocr_error.message}"
+                                ),
+                            ),
+                            page_text_coverage=0.0,
+                        )
                 return _result(
                     document,
                     text=normalize_extracted_text("\n\n".join(pages)),
@@ -104,6 +158,73 @@ def _extract_pdf(document: UploadedDocument) -> ExtractionResult:
                 message=f"Could not extract text from the PDF: {exc}",
             ),
         )
+
+
+def _ocr_sparse_pdf_pages(
+    *,
+    document: UploadedDocument,
+    pdf: object,
+    fitz: object,
+    pages: list[str],
+    sparse_page_indexes: list[int],
+) -> tuple[
+    list[str],
+    list[str],
+    str | None,
+    float | None,
+    int,
+    ExtractionError | None,
+]:
+    warnings: list[str] = []
+    ocr_engines: set[str] = set()
+    confidences: list[float] = []
+    ocr_page_count = 0
+    first_error: ExtractionError | None = None
+
+    for page_index in sparse_page_indexes:
+        page = pdf[page_index]  # type: ignore[index]
+        pixmap = page.get_pixmap(  # type: ignore[attr-defined]
+            matrix=fitz.Matrix(2, 2),  # type: ignore[attr-defined]
+            alpha=False,
+        )
+        image_bytes = pixmap.tobytes("png")
+        page_document = UploadedDocument(
+            filename=f"{document.filename}-page-{page_index + 1}.png",
+            content=image_bytes,
+            extension=".png",
+            content_type="image/png",
+            size_bytes=len(image_bytes),
+        )
+        page_result = _extract_image(page_document)
+        for warning in page_result.warnings:
+            if warning not in warnings:
+                warnings.append(warning)
+        if not page_result.text.strip():
+            if first_error is None and page_result.error is not None:
+                first_error = page_result.error
+            continue
+
+        pages[page_index] = page_result.text
+        ocr_page_count += 1
+        if page_result.diagnostics.ocr_engine:
+            ocr_engines.add(page_result.diagnostics.ocr_engine)
+        if page_result.diagnostics.ocr_mean_confidence is not None:
+            confidences.append(page_result.diagnostics.ocr_mean_confidence)
+
+    if len(ocr_engines) == 1:
+        ocr_engine = next(iter(ocr_engines))
+    elif ocr_engines:
+        ocr_engine = "mixed"
+    else:
+        ocr_engine = None
+    return (
+        pages,
+        warnings,
+        ocr_engine,
+        _mean(confidences),
+        ocr_page_count,
+        first_error,
+    )
 
 
 def _extract_docx(document: UploadedDocument) -> ExtractionResult:

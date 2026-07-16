@@ -19,14 +19,23 @@ The documents are fictional and contain no personal or confidential data.
 From `backend/`:
 
 ```bash
-python scripts/evaluate_qa.py
+npm run evaluate
+```
+
+Run individual scorecards:
+
+```bash
+npm run evaluate:qa
+npm run evaluate:ocr
 ```
 
 Machine-readable output:
 
 ```bash
 python scripts/evaluate_qa.py --json
+python scripts/evaluate_ocr.py --json
 ```
 
-The evaluator uses deterministic hashing embeddings and extractive-only mode,
-so results do not depend on downloaded models or a running local model service.
+The Q&A evaluator uses deterministic hashing embeddings and extractive-only
+mode. The OCR evaluator processes a high-contrast PNG and a raster-only PDF,
+then asks grounded questions against the recovered text.

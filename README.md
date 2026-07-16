@@ -56,7 +56,7 @@ supporting record, or obligation can have real consequences:
 | Capability | Result |
 |---|---|
 | Multi-format extraction | Reads PDF, DOCX, TXT, MD, PNG, and JPG files |
-| OCR fallback | Uses Tesseract or RapidOCR when direct text extraction is insufficient |
+| OCR fallback | Uses Tesseract or RapidOCR for images and scanned PDF pages |
 | Structured findings | Surfaces dates, deadlines, fees, documents, duties, contacts, and risks |
 | Priority analysis | Explains why findings are marked high, medium, or low priority |
 | Action planning | Converts findings into a persistent, filterable checklist |
@@ -221,7 +221,7 @@ npm run check
 
 This checkpoint validates:
 
-- 82 backend tests
+- 84 backend tests
 - 8 frontend tests
 - OpenAPI contract freshness
 - Raw TypeScript contract freshness
@@ -244,7 +244,7 @@ Papervault includes a deterministic, privacy-safe evaluation pack for the local
 retrieval and extractive-Q&A pipeline:
 
 ```bash
-npm run evaluate:qa
+npm run evaluate
 ```
 
 The current benchmark contains 17 questions across five representative
@@ -270,6 +270,24 @@ Current deterministic baseline:
 | Retrieval hit@3 | 100% |
 | Grounded source rate | 100% |
 | Negative-case accuracy | 100% |
+
+The OCR extension adds a high-contrast PNG and a raster-only PDF with no
+embedded text. It verifies local OCR detection, extraction quality, recovered
+dates and amounts, and four downstream grounded questions.
+
+| OCR metric | Result |
+|---|---:|
+| File extraction accuracy | 100% |
+| OCR detection accuracy | 100% |
+| Quality threshold pass rate | 100% |
+| Downstream Q&A accuracy | 100% |
+
+Individual benchmark commands:
+
+```bash
+npm run evaluate:qa
+npm run evaluate:ocr
+```
 
 ## API surface
 
@@ -328,7 +346,7 @@ papervault/
 - Docker and Compose development environment
 - One-click development container
 - Multi-document collections and cross-document retrieval
-- Expand the evaluation set with image-based OCR cases
+- Add rotated, low-contrast, and multi-page OCR stress cases
 
 ## License
 
