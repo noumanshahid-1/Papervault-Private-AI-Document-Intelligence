@@ -39,10 +39,6 @@
 
 ![Papervault private document intake in dark mode](docs/screenshots/papervault-intake-dark.png)
 
-### Structured review workspace
-
-![Papervault document review workspace](docs/screenshots/papervault-workspace.png)
-
 ### Explainable document Q&A
 
 ![Papervault grounded document Q&A with retrieval diagnostics](docs/screenshots/papervault-explainable-qa-dark.png)
