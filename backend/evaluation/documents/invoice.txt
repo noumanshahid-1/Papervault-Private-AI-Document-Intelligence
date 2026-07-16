@@ -1,0 +1,15 @@
+MERIDIAN SYSTEMS LTD.
+INVOICE MS-2026-041
+
+Customer: Example Trading Company
+Invoice date: 3 March 2026
+
+Annual platform support package: USD 2,400.
+On-site configuration visit: USD 300.
+
+The total amount due is USD 2,700. Payment is due by 31 March 2026 and must
+include the invoice number as the payment reference.
+
+Payments may be made by bank transfer to the account shown in the customer
+portal. Questions about the invoice may be sent to billing@meridian.example.
+Late balances may be subject to the charges stated in the service agreement.

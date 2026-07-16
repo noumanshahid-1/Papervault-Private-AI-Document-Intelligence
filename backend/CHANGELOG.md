@@ -11,6 +11,10 @@
 - Strengthened extractive Q&A with dependency-free hybrid vector, lexical, and
   intent ranking plus targeted handling for start dates, deadlines, required
   documents, payments, obligations, and contact details.
+- Added a deterministic 17-case evaluation pack covering retrieval hit rate,
+  answer accuracy, evidence grounding, and absent-answer false positives.
+- Improved obligation routing, total-amount selection, and missing-detail
+  rejection based on evaluation failures.
 - Added local answer-mode and Ollama model selection with explicit fallback
   diagnostics.
 - Added `/intelligence/runtime` for bounded Ollama model discovery and local

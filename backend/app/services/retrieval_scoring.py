@@ -14,6 +14,8 @@ _STOP_WORDS = {
     "at",
     "be",
     "by",
+    "can",
+    "could",
     "do",
     "does",
     "for",
@@ -37,6 +39,8 @@ _STOP_WORDS = {
     "which",
     "who",
     "why",
+    "would",
+    "should",
 }
 
 _INTENT_MARKERS: dict[str, tuple[str, ...]] = {
@@ -174,7 +178,7 @@ def hybrid_retrieval_score(query: str, text: str, vector_score: float) -> float:
     """Blend vector similarity, lexical coverage, and document-review intent."""
     lexical = lexical_relevance(query, text)
     intent = intent_relevance(query, text)
-    score = max(vector_score, 0.0) * 0.5 + lexical * 0.35 + intent * 0.15
+    score = max(vector_score, 0.0) * 0.45 + lexical * 0.4 + intent * 0.15
     return min(max(score, 0.0), 1.0)
 
 

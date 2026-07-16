@@ -221,7 +221,7 @@ npm run check
 
 This checkpoint validates:
 
-- 80 backend tests
+- 82 backend tests
 - 8 frontend tests
 - OpenAPI contract freshness
 - Raw TypeScript contract freshness
@@ -237,6 +237,39 @@ npm run build --prefix server
 npm run check --prefix frontend
 npm run check:api
 ```
+
+## Evaluation benchmark
+
+Papervault includes a deterministic, privacy-safe evaluation pack for the local
+retrieval and extractive-Q&A pipeline:
+
+```bash
+npm run evaluate:qa
+```
+
+The current benchmark contains 17 questions across five representative
+documents:
+
+- University admission offer
+- Revenue authority notice
+- Software support agreement
+- Invoice
+- Consular appointment notice
+
+It measures answer accuracy, retrieval hit@1, retrieval hit@3, source
+grounding, and false positives on questions whose answers are absent. The
+baseline uses hashing embeddings and extractive-only mode, so it does not
+depend on downloaded models or a running model service.
+
+Current deterministic baseline:
+
+| Metric | Result |
+|---|---:|
+| Answer accuracy | 100% |
+| Retrieval hit@1 | 100% |
+| Retrieval hit@3 | 100% |
+| Grounded source rate | 100% |
+| Negative-case accuracy | 100% |
 
 ## API surface
 
@@ -295,7 +328,7 @@ papervault/
 - Docker and Compose development environment
 - One-click development container
 - Multi-document collections and cross-document retrieval
-- Expanded evaluation set for OCR and retrieval quality
+- Expand the evaluation set with image-based OCR cases
 
 ## License
 

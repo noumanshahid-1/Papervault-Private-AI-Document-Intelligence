@@ -1,6 +1,6 @@
 # Sample Documents
 
-Use this folder for small public or synthetic documents when manually testing DocuSense AI.
+Use this folder for small public or synthetic documents when manually testing Papervault.
 
 Do not commit private, sensitive, personal, legal, immigration, medical, financial, or government documents. Prefer generated fixtures or public-domain samples.
 

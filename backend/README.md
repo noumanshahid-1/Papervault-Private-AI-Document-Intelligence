@@ -28,6 +28,16 @@ python -m pytest
 python -m compileall app tests
 ```
 
+Run the deterministic retrieval and Q&A evaluation:
+
+```powershell
+python scripts/evaluate_qa.py
+```
+
+The evaluation pack contains fictional admission, government notice, contract,
+invoice, and appointment documents. It reports answer accuracy, retrieval
+hit@1, retrieval hit@3, evidence-grounding rate, and negative-case accuracy.
+
 Export the canonical OpenAPI document used by the frontend:
 
 ```powershell

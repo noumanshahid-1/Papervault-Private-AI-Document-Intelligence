@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "uvicorn app.main:app --reload --port 8000",
+    "evaluate": "python scripts/evaluate_qa.py",
     "test": "python -m pytest"
   }
 }
