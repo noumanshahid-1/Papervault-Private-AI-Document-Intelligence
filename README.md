@@ -11,14 +11,14 @@
   </p>
 
   <p>
-    <a href="https://github.com/noumanshahid-1/-Papervault-Private-AI-Document-Intelligence/actions/workflows/backend.yml">
-      <img src="https://github.com/noumanshahid-1/-Papervault-Private-AI-Document-Intelligence/actions/workflows/backend.yml/badge.svg" alt="Backend checks" />
+    <a href="https://github.com/noumanshahid-1/Papervault-Private-AI-Document-Intelligence/actions/workflows/backend.yml">
+      <img src="https://github.com/noumanshahid-1/Papervault-Private-AI-Document-Intelligence/actions/workflows/backend.yml/badge.svg" alt="Backend checks" />
     </a>
-    <a href="https://github.com/noumanshahid-1/-Papervault-Private-AI-Document-Intelligence/actions/workflows/frontend.yml">
-      <img src="https://github.com/noumanshahid-1/-Papervault-Private-AI-Document-Intelligence/actions/workflows/frontend.yml/badge.svg" alt="Frontend checks" />
+    <a href="https://github.com/noumanshahid-1/Papervault-Private-AI-Document-Intelligence/actions/workflows/frontend.yml">
+      <img src="https://github.com/noumanshahid-1/Papervault-Private-AI-Document-Intelligence/actions/workflows/frontend.yml/badge.svg" alt="Frontend checks" />
     </a>
-    <a href="https://github.com/noumanshahid-1/-Papervault-Private-AI-Document-Intelligence/actions/workflows/server.yml">
-      <img src="https://github.com/noumanshahid-1/-Papervault-Private-AI-Document-Intelligence/actions/workflows/server.yml/badge.svg" alt="BFF checks" />
+    <a href="https://github.com/noumanshahid-1/Papervault-Private-AI-Document-Intelligence/actions/workflows/server.yml">
+      <img src="https://github.com/noumanshahid-1/Papervault-Private-AI-Document-Intelligence/actions/workflows/server.yml/badge.svg" alt="BFF checks" />
     </a>
   </p>
 
@@ -159,7 +159,7 @@ proxying while all document-processing logic remains in the Python backend.
 ### Install
 
 ```bash
-git clone https://github.com/noumanshahid-1/-Papervault-Private-AI-Document-Intelligence.git papervault
+git clone https://github.com/noumanshahid-1/Papervault-Private-AI-Document-Intelligence.git papervault
 cd papervault
 
 npm install
